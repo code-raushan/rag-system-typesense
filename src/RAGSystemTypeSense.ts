@@ -45,6 +45,7 @@ class RAGSystemTypeSense {
                     .documents()
                     .import(data, { action: "emplace", dirty_values: "drop" });
             },
+
         } satisfies TypesenseConfig;
 
         this.initializeGraph();
@@ -119,6 +120,8 @@ class RAGSystemTypeSense {
             model: "Xenova/all-MiniLM-L6-v2",
         });
 
+        console.log({ typesenseConfig: this.typesenseVectorStoreConfig });
+
         this.vectorStore = new Typesense(embeddings, this.typesenseVectorStoreConfig);
         return this.vectorStore;
     }
@@ -127,13 +130,14 @@ class RAGSystemTypeSense {
         console.log("inside retrieveDocs");
 
         const vectorStore = await this.buildTypeSenseVectorStore();
+        // console.log({ conf: vectorStore.})
 
-        const embeddings = new HuggingFaceTransformersEmbeddings({
-            model: "Xenova/all-MiniLM-L6-v2",
-        });
         console.log("question", state.question);
-        const retrievedDocs = await vectorStore.asRetriever().invoke(state.question);
+
+        // const retrievedDocs = await vectorStore.asRetriever().invoke(state.question);
+        const retrievedDocs = await vectorStore.similaritySearch(state.question);
         console.log({ retrievedDocs })
+
         return { documents: retrievedDocs };
     }
 

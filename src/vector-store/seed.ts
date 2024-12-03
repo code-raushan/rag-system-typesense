@@ -1,4 +1,3 @@
-import { HuggingFaceTransformersEmbeddings } from "@langchain/community/embeddings/hf_transformers";
 import { FieldType } from "typesense/lib/Typesense/Collection";
 import { typesense } from "..";
 
@@ -13,8 +12,8 @@ const schema = {
         { name: "slug", type: "string" as FieldType },
         { name: "startDate", type: "string" as FieldType },
         { name: "timing", type: "string" as FieldType },
-        { name: "text", type: "string" as FieldType }, // Combined text for embeddings
-        { name: "vec", type: "float[]" as FieldType, num_dimensions: 384 }, // Embedding vectors
+        // { name: "text", type: "string" as FieldType }, // Combined text for embeddings
+        // { name: "vec", type: "float[]" as FieldType, num_dimensions: 384 }, // Embedding vectors
     ],
 };
 
@@ -34,17 +33,17 @@ async function createCourseCollection() {
 async function generateDummyCourses(count: number) {
     const courses = [];
     const topics = ["Python", "Data Science", "Data Engineering", "Full Stack", "Frontend", "Backend", "JavaScript", "Go", "AWS"];
-    const embeddings = new HuggingFaceTransformersEmbeddings({
-        model: "Xenova/all-MiniLM-L6-v2",
-    });
+    // const embeddings = new HuggingFaceTransformersEmbeddings({
+    //     model: "Xenova/all-MiniLM-L6-v2",
+    // });
 
     for (let i = 1; i <= count; i++) {
         const topic = topics[Math.floor(Math.random() * topics.length)];
         const title = `${topic} Course ${i}`;
         const subtitle = `An in-depth ${topic} course`;
         const description = `This course covers ${topic} topics in detail, including practical applications and hands-on projects.`;
-        const text = `${title} ${subtitle} ${description}`; // Combined text for embedding
-        const vec = await embeddings.embedQuery(text); // Generate embedding
+        // const text = `${title} ${subtitle} ${description}`; // Combined text for embedding
+        // const vec = await embeddings.embedQuery(text); // Generate embedding
 
         courses.push({
             id: `course_${i}`,
@@ -54,8 +53,8 @@ async function generateDummyCourses(count: number) {
             slug: `${topic.toLowerCase()}-course-${i}`,
             startDate: new Date(Date.now() + i * 86400000).toISOString(), // Staggered start dates
             timing: `${Math.floor(Math.random() * 4) + 1} hours per week`,
-            text, // Combined text field
-            vec,  // Embedding vector
+            // text, // Combined text field
+            // vec,  // Embedding vector
         });
     }
     return courses;

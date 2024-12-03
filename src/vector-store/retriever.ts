@@ -12,7 +12,7 @@ export async function retrieveCourses() {
 // retrieveCourses();
 
 async function testRAG() {
-    const result = await ragSystemTypeSense.invokeRAG("Python Course");
+    const result = await ragSystemTypeSense.invokeRAG("python");
     console.log(result.generatedAnswer);
 }
 
